@@ -30,7 +30,7 @@ if(isset($_POST["idBook"])){
     <?php
 } else {
     $idBook = $_POST["idBook"];
-    $arrayBooks = [""];
+    $arrayBooks = [""]; // Aqui se deberia poner el array de los libros para que lo encuentre, pero no se donde hay que buscarl por que no hay ningun csv de libros.
 
     for ($i = 0; $i < count($arrayBooks); $i++) {
         if($arrayBooks[$i]["id"] == $idBook){
