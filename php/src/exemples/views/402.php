@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<form method="post" action="402.php">
+<form method="post" action="../402.php">
     <div class="form-group row">
         <label for="nom" class="col-4 col-form-label">Nom</label>
         <div class="col-8">
