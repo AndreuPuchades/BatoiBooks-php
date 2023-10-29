@@ -52,7 +52,7 @@
             font-weight: bold;
         }
 
-        .error-message {
+        .error {
             color: red;
             font-size: 12px;
             margin-top: 5px;
@@ -63,30 +63,26 @@
 <form action="../register.php" method="post">
     <div>
         <label for="nick">Nick:</label>
-        <input type="text" id="nick" name="nick" required>
+        <input type="text" id="nick" name="nick" >
     </div>
     <?php printErrors($errors, 'nick'); ?>
     <div>
         <label for="email">Correu electrònic:</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" >
     </div>
     <?php printErrors($errors, 'email'); ?>
-
     <div>
         <label for="password">Contrasenya:</label>
-        <input type="password" id="password" name="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+        <input type="password" id="password" name="password"  minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
     </div>
     <?php printErrors($errors, 'password'); ?>
-
     <div>
         <label for="confirm_password">Repeteix la Contrasenya:</label>
-        <input type="password" id="confirm_password" name="confirm_password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+        <input type="password" id="confirm_password" name="confirm_password"  minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
     </div>
     <?php printErrors($errors, 'confirm_password'); ?>
-
     <input type="submit" value="Registre">
     <a href="../index.php">Home</a>
 </form>
 </body>
 </html>
-

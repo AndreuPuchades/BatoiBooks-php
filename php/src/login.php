@@ -19,7 +19,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(!empty($users)){
         foreach ($users as $user){
             if($user->getEmail() == $_POST['email']){
-                if(isset($_POST['password']) && $user->getPassword() == $_POST['password']){
+                if(isset($_POST['password']) && password_verify($_POST['password'], $user->getPassword())){
                     $userLogin = $user;
                 } else {
                     $errors['password'] = 'La contraseña es incorrecta.';

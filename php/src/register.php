@@ -7,31 +7,31 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     extract($_POST);
     $errors = [];
 
-    if(!isset($_POST['nick'])){
+    if(empty($_POST['nick'])){
         $errors['nick'] = 'Debes introducir el nick.';
     }
 
-    if(!isset($_POST['email'])){
+    if(empty($_POST['email'])){
         $errors['email'] = 'Debes introducir el email.';
     }
 
-    if(!isset($_POST['password'])){
+    if(empty($_POST['password'])){
         $errors['password'] = 'Debes introducir la contraseña.';
     }
 
-    if(!isset($_POST['confirm_password'])){
+    if(empty($_POST['confirm_password'])){
         $errors['confirm_password'] = 'Debes introducir el confirmar contraseña.';
     }
 
-    if(isset($_POST['confirm_password']) && isset($_POST['password'])){
+    if(!empty($_POST['confirm_password']) && !empty($_POST['password'])){
         if($_POST['confirm_password'] != $_POST['password']){
             $errors['password'] = 'No coincide la contraseña.';
             $errors['confirm_password'] = 'No coincide la contraseña.';
         }
     }
 
-    if(isset($_POST['nick']) && isset($_POST['email'])){
-        if(isset($_SESSION['users']) && empty($_SESSION['users'])){
+    if(!empty($_POST['nick']) && !empty($_POST['email'])){
+        if(isset($_SESSION['users'])){
             $users = $_SESSION['users'];
             for ($i = 0; $i < count($users); $i++) {
                 if($users[$i]->getNick() == $_POST['nick']){
@@ -45,7 +45,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 
     if(empty($errors)){
-        $users[] = new User(count($users), $_POST['email'], $_POST['password'], $_POST['nick']);
+        $users[] = new User(count($users), $_POST['email'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['nick']);
         $_SESSION['users'] = serialize($users);
 
         include_once "./index.php";

@@ -51,7 +51,7 @@
                         <i class="fa fa-envelope-open-o"></i>
                     </div>
                 </div>
-                <input id="price" name="price" placeholder="Escriu el preu" type="text" class="form-control">
+                <input id="price" name="price" placeholder="Escriu el preu" type="number" class="form-control">
             </div>
         </div>
     </div>
@@ -66,7 +66,7 @@
                         <i class="fa fa-envelope-open-o"></i>
                     </div>
                 </div>
-                <input id="pages" name="pages" placeholder="Escriu les pagines" type="text" class="form-control">
+                <input id="pages" name="pages" placeholder="Escriu les pagines" type="number" class="form-control">
             </div>
         </div>
     </div>

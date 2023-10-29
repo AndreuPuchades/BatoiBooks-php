@@ -16,11 +16,11 @@ if(session_status() == PHP_SESSION_NONE){
     session_start();
 }
 
-$users = isset($_SESSION['users']) ? unserialize($_SESSION['users']) : [];
-$books = isset($_SESSION['books']) ? unserialize($_SESSION['books']) : [];
-$modules = isset($_SESSION['modules']) ? unserialize($_SESSION['modules']) : [];
-$courses = isset($_SESSION['courses']) ? unserialize($_SESSION['courses']) : [];
-$statuses = isset($_SESSION['statuses']) ? unserialize($_SESSION['statuses']) : [];
+$users = isset($_SESSION['users']) ? unserialize($_SESSION['users']) : array();
+$books = isset($_SESSION['books']) ? unserialize($_SESSION['books']) : array();
+$modules = isset($_SESSION['modules']) ? unserialize($_SESSION['modules']) : array();
+$courses = isset($_SESSION['courses']) ? unserialize($_SESSION['courses']) : array();
+$statuses = isset($_SESSION['statuses']) ? unserialize($_SESSION['statuses']) : array();
 
 $_SESSION['users'] = serialize($users);
 $_SESSION['books'] = serialize($books);
