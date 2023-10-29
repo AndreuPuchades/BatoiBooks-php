@@ -1,4 +1,5 @@
 <?php
+namespace BatBook;
 class Book{
     private $idUser;
     private $idModule;

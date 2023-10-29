@@ -1,5 +1,6 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'].'/exceptions/InvalidFormatException.php';
+namespace BatBook;
+use BatBook\exceptions\InvalidFormatException;
 
 class Module
 {

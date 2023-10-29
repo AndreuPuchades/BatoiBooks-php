@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <?php
+
+use App\exceptions\InvalidFormatException;
+use App\exceptions\NotFoundException;
+
 extract($_POST);
 unset($_POST['submit']);
 
