@@ -6,9 +6,9 @@ use BatBook\Module;
 include_once "./load.php";
 
 try {
-    $modulesOptions = Module::importModuleFromCSV('./csv/modulesbook.csv');
-    $statusOptions = ['Good', 'Bad'];
-} catch (InvalidFormatException $e) {
+    $modulesOptions = Module::getModulesInArray();
+    $statusOptions = ['Good', 'Bad', 'Used', 'New'];
+} catch (InvalidFormatException|Exception $e) {
     echo $e->getMessage();
 }
 
@@ -45,22 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors["photo"] = "No se ha seleccionado ninguna imagen.";
     }
 
-    /*
-        if ($_FILES["photo"] != "") {
-            $nombreArchivo = $_FILES["photo"]["name"];
-            $rutaTemporal = $_FILES["photo"]["tmp_name"];
-
-            $rutaCompleta = "./photos/" . $nombreArchivo;
-
-            if (move_uploaded_file($rutaTemporal, $rutaCompleta)) {
-                $errors["photo"] = "La imagen se ha cargado exitosamente.";
-            } else {
-                echo "Error al cargar la imagen.";
-            }
-        } else {
-            $errors["photo"] = "El camp foto és obligatori.";
-        }
-    */
     if (empty($_POST["module"])) {
         $errors["module"] = "El camp modul és obligatori.";
     }
@@ -70,16 +54,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if(empty($errors)){
-        if(!isset($_SESSION['userLogin'])){
-            $book = new Book(-1, $module, $publisher, $price, $pages, $status, $photo, $comments);
-            $books[] = serialize($book);
-        } else {
+        if(isset($_SESSION['userLogin'])){
             $idUser =  unserialize($_SESSION['userLogin'])->getId();
-            $book = new Book($idUser, $module, $publisher, $price, $pages, $status, $photo, $comments);
-            $books[] = $book;
+            $book = new Book(-1, $idUser, $module, $publisher, $price, $pages, $status, $photo, $comments);
+            Book::save($book);
         }
-
-        $_SESSION['books'] = serialize($books);
 
         include_once "./views/book.php";
     } else {

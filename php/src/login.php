@@ -10,28 +10,21 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if(!isset($_POST['email'])){
         $errors['email'] = 'Debes introducir el email.';
+    } else {
+        $user = User::getUserEmail($_POST['email']);
+        if($user == null){
+            $errors['email'] = 'El email introducido no existe.';
+        } else {
+            if(isset($_POST['password']) && password_verify($_POST['password'], $user->getPassword())){
+                $userLogin = $user;
+            } else {
+                $errors['password'] = 'La contraseña es incorrecta.';
+            }
+        }
     }
 
     if(!isset($_POST['password'])){
         $errors['password'] = 'Debes introducir la contraseña.';
-    }
-
-    if(!empty($users)){
-        foreach ($users as $user){
-            if($user->getEmail() == $_POST['email']){
-                if(isset($_POST['password']) && password_verify($_POST['password'], $user->getPassword())){
-                    $userLogin = $user;
-                } else {
-                    $errors['password'] = 'La contraseña es incorrecta.';
-                }
-            }
-        }
-
-        if(!isset($userLogin)){
-            $errors['email'] = 'El email introducido no existe.';
-        }
-    } else {
-        $errors['email'] = 'El email introducido no existe.';
     }
 
     if(empty($errors)){

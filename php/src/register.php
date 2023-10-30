@@ -9,10 +9,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if(empty($_POST['nick'])){
         $errors['nick'] = 'Debes introducir el nick.';
+    } else {
+        if(User::getUserNick($_POST['nick']) != null){
+            $errors['nick'] = 'Ya existe este nick';
+        }
     }
 
     if(empty($_POST['email'])){
         $errors['email'] = 'Debes introducir el email.';
+    } else {
+        if(User::getUserEmail($_POST['email']) != null){
+            $errors['email'] = 'Ya existe este email';
+        }
     }
 
     if(empty($_POST['password'])){
@@ -30,24 +38,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
     }
 
-    if(!empty($_POST['nick']) && !empty($_POST['email'])){
-        if(isset($_SESSION['users'])){
-            $users = unserialize($_SESSION['users']);
-            for ($i = 0; $i < count($users); $i++) {
-                if($users[$i]->getNick() == $_POST['nick']){
-                    $errors['nick'] = 'Ya existe este nick';
-                }
-                if($users[$i]->getEmail() == $_POST['email']){
-                    $errors['email'] = 'Ya existe este email';
-                }
-            }
-        }
-    }
-
     if(empty($errors)){
-        $users[] = new User(count($users), $_POST['email'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['nick']);
-        $_SESSION['users'] = serialize($users);
-
+        $userNew = new User(-1, $_POST['email'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['nick']);
+        User::save($userNew);
         header("Location: index.php");
     } else {
         include_once('./views/register.php');

@@ -62,4 +62,49 @@ class User{
     {
         return "User [email=$this->email, nick=$this->nick]";
     }
+
+    public static function save($user) {
+        $conexionNew = new Connection();
+        $conexion = $conexionNew->getConnection();
+        $sql = "INSERT INTO users (email, nick, password) VALUES (:email, :nick, :password)";
+        $variables = $conexion->prepare($sql);
+        $email = $user->getEmail();
+        $nick = $user->getNick();
+        $password = $user->getPassword();
+
+        $variables->bindParam(':email', $email);
+        $variables->bindParam(':nick', $nick);
+        $variables->bindParam(':password', $password);
+
+        $variables->execute();
+        return $conexion->lastInsertId();
+    }
+
+    public static function getUserNick($nick){
+        $conexionNew = new Connection();
+        $conexion = $conexionNew->getConnection();
+
+        $sql = "select * from users where nick = ?";
+        $sentencia = $conexion -> prepare($sql);
+        $sentencia -> execute([$nick]);
+        return self::getUserForm($sentencia -> fetch());
+    }
+
+    public static function getUserEmail($email){
+        $conexionNew = new Connection();
+        $conexion = $conexionNew->getConnection();
+
+        $sql = "select * from users where email = ?";
+        $sentencia = $conexion -> prepare($sql);
+        $sentencia -> execute([$email]);
+        return self::getUserForm($sentencia -> fetch());
+    }
+
+    private static function getUserForm($usuario){
+        if($usuario){
+            return new User($usuario["id"], $usuario["email"], $usuario["password"], $usuario["nick"]);
+        } else {
+            return null;
+        }
+    }
 }

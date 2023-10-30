@@ -1,9 +1,12 @@
 <?php
 namespace BatBook;
+use BatBook\Connection;
 use BatBook\exceptions\InvalidFormatException;
+use Exception;
+use PDO;
+use PDOException;
 
-class Module
-{
+class Module{
     private $code;
     private $cliteral;
     private $vliteral;
@@ -84,4 +87,44 @@ class Module
 
         return $data;
     }
+
+    public static function getModulesInArray() {
+        $data = [];
+
+        try {
+            $conexionNew = new Connection();
+            $conexion = $conexionNew->getConnection();
+            $sql="SELECT * FROM modules";
+
+            $sentencia = $conexion -> prepare($sql);
+            $sentencia -> setFetchMode(PDO::FETCH_OBJ);
+            $sentencia -> execute();
+
+            while($t = $sentencia -> fetch()) {
+                $data[] = new Module($t -> code,  $t -> cliteral, $t -> vliteral, $t -> idCycle);
+            }
+        } catch (PDOException $e) {
+            throw new Exception("Error en la consulta: " . $e->getMessage());
+        }
+
+        return $data;
+    }
 }
+
+/*
+public function importModules(){
+    $data = [];
+
+    $sql = "SELECT * FROM modules";
+    $sentencia = $this->connection->prepare($sql);
+
+    $sentencia -> setFetchMode(PDO::FETCH_CLASS, "Modules");
+    $sentencia -> execute();
+
+    while($t = $sentencia -> fetch()) {
+        $data[] = new Module($t -> getCode(), $t -> getCliteral(), $t -> getVliteral(), $t -> getIdCycle());
+    }
+
+    return $data;
+}
+*/

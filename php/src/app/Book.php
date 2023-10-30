@@ -1,6 +1,7 @@
 <?php
 namespace BatBook;
 class Book{
+    private $id;
     private $idUser;
     private $idModule;
     private $publisher;
@@ -11,8 +12,9 @@ class Book{
     private $comments;
     private $soldDate;
 
-    public function __construct($idUser, $idModule, $publisher, $price, $pages, $status, $photo, $comments, $soldDate = false)
+    public function __construct($id, $idUser, $idModule, $publisher, $price, $pages, $status, $photo, $comments, $soldDate = "")
     {
+        $this->id = $id;
         $this->idUser = $idUser;
         $this->idModule = $idModule;
         $this->publisher = $publisher;
@@ -22,6 +24,16 @@ class Book{
         $this->photo = $photo;
         $this->comments = $comments;
         $this->soldDate = $soldDate;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id): void
+    {
+        $this->id = $id;
     }
 
     public function getIdUser()
@@ -138,5 +150,39 @@ class Book{
             'comments' => $this->comments,
             'soldDate' => $this->soldDate
         ]);
+    }
+
+    public static function save($book) {
+        $conexionNew = new Connection();
+        $conexion = $conexionNew->getConnection();
+        $sql = "INSERT INTO books (idUser, idModule, publisher, price, pages, status, photo, comments, soldDate) VALUES (:idUser, :idModule, :publisher, :price, :pages, :status, :photo, :comments, :soldDate)";
+        $variables = $conexion->prepare($sql);
+        $idUser = $book->getIdUser();
+        $idModule = $book->getIdModule();
+        $publisher = $book->getPublisher();
+        $price = $book->getPrice();
+        $pages = $book->getPages();
+        $status = $book->getStatus();
+        $photo = $book->getPhoto();
+        $comments = $book->getComments();
+        $soldDate = $book->getSoldDate();
+        if($soldDate !== ''){
+            $soldDate = date_format(date_create($soldDate), 'Y-m-d');
+        } else {
+            $soldDate = null;
+        }
+
+        $variables->bindParam(':idUser', $idUser);
+        $variables->bindParam(':idModule', $idModule);
+        $variables->bindParam(':publisher', $publisher);
+        $variables->bindParam(':price', $price);
+        $variables->bindParam(':pages', $pages);
+        $variables->bindParam(':status', $status);
+        $variables->bindParam(':photo', $photo);
+        $variables->bindParam(':comments', $comments);
+        $variables->bindParam(':soldDate', $soldDate);
+
+        $variables->execute();
+        return $conexion->lastInsertId();
     }
 }
