@@ -36,7 +36,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if(empty($errors)){
         $_SESSION['userLogin'] = serialize($userLogin);
-        include_once "index.php";
+        header("Location: index.php");
     } else {
         include_once('./views/login.php');
     }

@@ -32,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if(!empty($_POST['nick']) && !empty($_POST['email'])){
         if(isset($_SESSION['users'])){
-            $users = $_SESSION['users'];
+            $users = unserialize($_SESSION['users']);
             for ($i = 0; $i < count($users); $i++) {
                 if($users[$i]->getNick() == $_POST['nick']){
                     $errors['nick'] = 'Ya existe este nick';
@@ -48,7 +48,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $users[] = new User(count($users), $_POST['email'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['nick']);
         $_SESSION['users'] = serialize($users);
 
-        include_once "./index.php";
+        header("Location: index.php");
     } else {
         include_once('./views/register.php');
     }

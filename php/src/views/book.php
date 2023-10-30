@@ -14,8 +14,15 @@
             height: 100vh;
         }
 
-        .detalls {
+        .book{
             width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .detalls {
+            width: 100%;
             padding: 20px;
             box-sizing: border-box;
             background-color: #fff;
@@ -41,8 +48,7 @@
         }
 
         img {
-            max-width: 100%;
-            height: auto;
+
             display: block;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -62,19 +68,21 @@
     </style>
 </head>
 <body>
-<div class="detalls">
-    <h3>Modul -> <?= $book->getIdModule() ?></h3>
-    <p>Id Usuari -> <?= $book->getIdUser() ?></p>
-    <p>Editorial -> <?= $book->getPublisher() ?></p>
-    <p>Venido -> <?= ($book->getSoldDate())?'Si':'NO' ?></p>
-    <p>Preu -> <?= $book->getPrice() ?></p>
-    <p>Pagines -> <?= $book->getPages() ?></p>
-    <p>Estat -> <?= $book->getStatus() ?></p>
-    <p>Comentari -> <?= $book->getComments() ?></p>
-    <a href="../index.php">Home</a>
-</div>
-<div class="col-6">
-    <img src="<?= $book->getPhoto() ?>" alt="Photo:"/>
+<div class="book">
+    <div class="detalls">
+        <h3>Modul -> <?= $book->getIdModule() ?></h3>
+        <p>Id Usuari -> <?= $book->getIdUser() ?></p>
+        <p>Editorial -> <?= $book->getPublisher() ?></p>
+        <p>Venido -> <?= ($book->getSoldDate())?'Si':'NO' ?></p>
+        <p>Preu -> <?= $book->getPrice() ?></p>
+        <p>Pagines -> <?= $book->getPages() ?></p>
+        <p>Estat -> <?= $book->getStatus() ?></p>
+        <p>Comentari -> <?= $book->getComments() ?></p>
+        <a href="../index.php">Home</a>
+    </div>
+    <div class="col-6">
+        <img src="<?= $book->getPhoto() ?>" width="300" height="300">
+    </div>
 </div>
 </body>
 </html>
