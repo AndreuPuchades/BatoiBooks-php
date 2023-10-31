@@ -65,6 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         include_once "./views/newBook.php";
     }
 } else {
-    $errors = [];
-    include "./views/newBook.php";
+    if(isset($_SESSION['userLogin'])){
+        $errors = [];
+        include "./views/newBook.php";
+    } else {
+        header("Location: login.php");
+    }
 }

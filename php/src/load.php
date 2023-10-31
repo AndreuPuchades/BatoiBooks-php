@@ -1,9 +1,5 @@
 <?php
 include_once('./myHelpers/utils.php');
-use BatBook\User;
-use BatBook\Book;
-use BatBook\Module;
-use BatBook\Course;
 
 spl_autoload_register( function($nombreClase) {
     $ruta = $nombreClase.'.php';
