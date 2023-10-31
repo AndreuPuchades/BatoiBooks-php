@@ -1,6 +1,6 @@
 <?php
 namespace BatBook;
-use BatBook\exceptions\WeakPasswordException;
+use App\exceptions\WeakPasswordException;
 class User{
     private $id;
     private $email;
@@ -97,6 +97,16 @@ class User{
         $sql = "select * from users where email = ?";
         $sentencia = $conexion -> prepare($sql);
         $sentencia -> execute([$email]);
+        return self::getUserForm($sentencia -> fetch());
+    }
+
+    public static function getUserId($id){
+        $conexionNew = new Connection();
+        $conexion = $conexionNew->getConnection();
+
+        $sql = "select * from users where id = ?";
+        $sentencia = $conexion -> prepare($sql);
+        $sentencia -> execute([$id]);
         return self::getUserForm($sentencia -> fetch());
     }
 

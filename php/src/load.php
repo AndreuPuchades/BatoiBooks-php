@@ -1,5 +1,5 @@
 <?php
-include_once('./myHelpers/utils.php');
+include_once($_SERVER['DOCUMENT_ROOT']."/myHelpers/utils.php");
 
 spl_autoload_register( function($nombreClase) {
     $ruta = $nombreClase.'.php';

@@ -1,5 +1,5 @@
 <?php
-namespace BatBook\exceptions;
+namespace App\exceptions;
 class NotFoundException extends \Exception
 {
     public function __construct($mensaje)

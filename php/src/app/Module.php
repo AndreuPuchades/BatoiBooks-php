@@ -109,22 +109,22 @@ class Module{
 
         return $data;
     }
-}
 
-/*
-public function importModules(){
-    $data = [];
+    public static function getModuleCode($idModule){
+        $conexionNew = new Connection();
+        $conexion = $conexionNew->getConnection();
 
-    $sql = "SELECT * FROM modules";
-    $sentencia = $this->connection->prepare($sql);
-
-    $sentencia -> setFetchMode(PDO::FETCH_CLASS, "Modules");
-    $sentencia -> execute();
-
-    while($t = $sentencia -> fetch()) {
-        $data[] = new Module($t -> getCode(), $t -> getCliteral(), $t -> getVliteral(), $t -> getIdCycle());
+        $sql = "select * from modules where code = ?";
+        $sentencia = $conexion -> prepare($sql);
+        $sentencia -> execute([$idModule]);
+        return self::getModuleForm($sentencia -> fetch());
     }
 
-    return $data;
+    private static function getModuleForm($modulo){
+        if($modulo){
+            return new Module($modulo["code"], $modulo["cliteral"], $modulo["vliteral"], $modulo["cliteral"]);
+        } else {
+            return null;
+        }
+    }
 }
-*/

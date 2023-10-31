@@ -1,5 +1,9 @@
 <?php
 namespace BatBook;
+
+use PDO;
+use PDOException;
+
 class Book{
     private $id;
     private $idUser;
@@ -121,6 +125,11 @@ class Book{
         return $this->soldDate;
     }
 
+    public function getSoldDateForm()
+    {
+        return !isset($this->soldDate) ? "No esta vendido" : $this->soldDate;
+    }
+
     public function setSoldDate($soldDate)
     {
         $this->soldDate = $soldDate;
@@ -184,5 +193,38 @@ class Book{
 
         $variables->execute();
         return $conexion->lastInsertId();
+    }
+
+    public static function getAllBooks(): ?array
+    {
+        $conexionNew = new Connection();
+        $conexion = $conexionNew->getConnection();
+        $sql = "select * from books";
+        $data = [];
+
+        try{
+            $sentencia = $conexion -> prepare($sql);
+            $sentencia -> setFetchMode(PDO::FETCH_ASSOC);
+            $sentencia -> execute();
+
+            while($fila = $sentencia -> fetch()){
+                $data[] = self::getBookForm($fila);
+            }
+
+            return $data;
+        }catch(PDOException $e) {
+            echo $e -> getMessage();
+        }
+
+        return null;
+    }
+
+    private static function getBookForm($libro): ?Book{
+        if($libro){
+            return new Book($libro["id"], $libro["idUser"], $libro["idModule"], $libro["publisher"], $libro["price"],
+                $libro["pages"], $libro["status"], $libro["photo"], $libro["comments"], $libro["soldDate"]);
+        } else {
+            return null;
+        }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 include_once 'load.php';
 
-use BatBook\User;
+use App\User;
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     extract($_POST);
