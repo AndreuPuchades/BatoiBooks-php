@@ -1,5 +1,4 @@
 <?php
-
 namespace BatBook;
 use PDO;
 use PDOException;

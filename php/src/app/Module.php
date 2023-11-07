@@ -120,7 +120,8 @@ class Module{
         return self::getModuleForm($sentencia -> fetch());
     }
 
-    private static function getModuleForm($modulo){
+    private static function getModuleForm($modulo): ?Module
+    {
         if($modulo){
             return new Module($modulo["code"], $modulo["cliteral"], $modulo["vliteral"], $modulo["cliteral"]);
         } else {

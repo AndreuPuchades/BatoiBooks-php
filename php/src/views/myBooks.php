@@ -85,7 +85,8 @@ if(!empty($books)){
         $user = User::getUserId($book->getIdUser());
         echo '<tr><td>'. $book->getId(). '</td><td>'. $user->getNick(). '</td><td>'. $module->getCliteral(). '</td><td>'. $book->getPublisher(). '</td>
                 <td>'. $book->getPrice(). ' €</td><td>'. $book->getPages(). ' paginas</td><td>'. $book->getStatus(). '</td><td>'. $book->getComments(). '</td>
-                <td>'. $book->getSoldDateForm(). '</td><td><img src="../'. $book->getPhoto(). '" width="100" height="100"></td></tr>';
+                <td>'. $book->getSoldDateForm(). '</td><td><img src="../'. $book->getPhoto(). '" width="100" height="100"></td>
+                <td><a href="../modifyBook.php?id='. $book->getId(). '">Modificar</a><a href="../deleteBook.php?id='. $book->getId(). '">Eliminar</a></td></tr>';
     }
     echo "</table></div>";
 } else {

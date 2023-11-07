@@ -1,7 +1,7 @@
 <?php
 namespace BatBook;
 
-use App\exceptions\InvalidFormatException;
+use BatBook\exceptions\InvalidFormatException;
 
 class Course{
     private $cycle;

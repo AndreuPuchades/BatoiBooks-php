@@ -5,6 +5,7 @@ use PDO;
 use PDOException;
 
 class Book{
+    public static $nameTable = "books";
     private $id;
     private $idUser;
     private $idModule;
@@ -149,6 +150,7 @@ class Book{
     public function __toJson()
     {
         return json_encode([
+            'id' => $this->id,
             'idUser' => $this->idUser,
             'idModule' => $this->idModule,
             'publisher' => $this->publisher,
@@ -161,62 +163,29 @@ class Book{
         ]);
     }
 
-    public static function save($book) {
-        $conexionNew = new Connection();
-        $conexion = $conexionNew->getConnection();
-        $sql = "INSERT INTO books (idUser, idModule, publisher, price, pages, status, photo, comments, soldDate) VALUES (:idUser, :idModule, :publisher, :price, :pages, :status, :photo, :comments, :soldDate)";
-        $variables = $conexion->prepare($sql);
-        $idUser = $book->getIdUser();
-        $idModule = $book->getIdModule();
-        $publisher = $book->getPublisher();
-        $price = $book->getPrice();
-        $pages = $book->getPages();
-        $status = $book->getStatus();
-        $photo = $book->getPhoto();
-        $comments = $book->getComments();
-        $soldDate = $book->getSoldDate();
-        if($soldDate !== ''){
-            $soldDate = date_format(date_create($soldDate), 'Y-m-d');
-        } else {
-            $soldDate = null;
-        }
-
-        $variables->bindParam(':idUser', $idUser);
-        $variables->bindParam(':idModule', $idModule);
-        $variables->bindParam(':publisher', $publisher);
-        $variables->bindParam(':price', $price);
-        $variables->bindParam(':pages', $pages);
-        $variables->bindParam(':status', $status);
-        $variables->bindParam(':photo', $photo);
-        $variables->bindParam(':comments', $comments);
-        $variables->bindParam(':soldDate', $soldDate);
-
-        $variables->execute();
-        return $conexion->lastInsertId();
+    public function getFormArray(){
+        return array('idUser' => $this->idUser, 'idModule' => $this->idModule, 'publisher' => $this->publisher,
+            'price' => $this->price, 'pages' => $this->pages, 'status' => $this->status, 'photo' => $this->photo,
+            'comments' => $this->comments, 'soldDate' => $this->soldDate);
     }
 
-    public static function getAllBooks(): ?array
+    public static function save($book) {
+        return QueryBuilder::insert(Book::class, $book->getFormArray());
+    }
+
+    public static function getAllBooks()
     {
-        $conexionNew = new Connection();
-        $conexion = $conexionNew->getConnection();
-        $sql = "select * from books";
-        $data = [];
+        return QueryBuilder::sql(Book::class);
+    }
 
-        try{
-            $sentencia = $conexion -> prepare($sql);
-            $sentencia -> setFetchMode(PDO::FETCH_ASSOC);
-            $sentencia -> execute();
+    public static function deleteBook($idBook): bool
+    {
+        return QueryBuilder::delete(Book::class, $idBook);
+    }
 
-            while($fila = $sentencia -> fetch()){
-                $data[] = self::getBookForm($fila);
-            }
-
-            return $data;
-        }catch(PDOException $e) {
-            echo $e -> getMessage();
-        }
-
-        return null;
+    public static function update($book): bool
+    {
+        return QueryBuilder::update(Book::class, $book->getFormArray(), $book->getId());
     }
 
     private static function getBookForm($libro): ?Book{

@@ -1,6 +1,7 @@
 <?php
 namespace BatBook;
-use App\exceptions\WeakPasswordException;
+use BatBook\exceptions\WeakPasswordException;
+
 class User{
     private $id;
     private $email;
