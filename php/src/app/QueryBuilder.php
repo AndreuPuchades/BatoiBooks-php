@@ -2,6 +2,7 @@
 namespace BatBook;
 
 use PDO;
+use PDOException;
 
 class QueryBuilder
 {
@@ -39,7 +40,19 @@ class QueryBuilder
         return  $sentence->fetchAll();
     }
 
-    public static function find($class, $id){}
+    public static function find($class, $name, $value) {
+        $table = $class::$nameTable;
+        $conn = (new Connection)->getConnection();
+
+        $sql = "SELECT * FROM $table WHERE ". $name. "=:". $name;
+
+        $statement = $conn->prepare($sql);
+        $nombre = ':'. $name;
+        $statement->bindValue($nombre, $value);
+        $statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $class);
+        $statement->execute();
+        return $statement->fetch();
+    }
 
     public static function insert($class, $values)
     {
@@ -64,7 +77,13 @@ class QueryBuilder
         $sql .= ")";
         $sentence = $conn->prepare($sql);
         foreach ($values as $key => $value) {
-            $sentence->bindValue(":$key", $value);
+            if($key == "soldDate"){
+                $date = date("Y-m-d", strtotime($value));
+                $sentence->bindValue(":$key", $date);
+            } else {
+                $sentence->bindValue(":$key", $value);
+            }
+
         }
         $sentence -> execute();
         return $conn->lastInsertId();

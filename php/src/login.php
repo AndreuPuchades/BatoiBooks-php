@@ -29,7 +29,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if(empty($errors)){
         $_SESSION['userLogin'] = serialize($userLogin);
-        header("Location: index.php");
+        include_once('./index.php');
     } else {
         include_once('./views/login.php');
     }

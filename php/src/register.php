@@ -39,9 +39,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 
     if(empty($errors)){
-        $userNew = new User(-1, $_POST['email'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['nick']);
+        $userNew = new User(-1, $_POST['email'], $_POST['nick'], password_hash($_POST['password'], PASSWORD_DEFAULT));
         User::save($userNew);
-        header("Location: index.php");
+        include_once('./views/login.php');
     } else {
         include_once('./views/register.php');
     }

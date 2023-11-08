@@ -7,12 +7,13 @@ use PDO;
 use PDOException;
 
 class Module{
+    public static $nameTable = "modules";
     private $code;
     private $cliteral;
     private $vliteral;
     private $idCycle;
 
-    public function __construct($code, $cliteral, $vliteral, $idCycle)
+    public function __construct($code = '', $cliteral = '', $vliteral = '', $idCycle = '')
     {
         $this->code = $code;
         $this->cliteral = $cliteral;
@@ -69,63 +70,11 @@ class Module{
         return json_decode(['code'=>$this->code, 'cliteral'=>$this->cliteral, 'vliteral'=>$this->vliteral, 'idCycle'=>$this->idCycle]);
     }
 
-    public static function importModuleFromCSV($file){
-        $data = [];
-
-        if (($handle = fopen($file, 'r')) !== false) {
-            while (($row = fgetcsv($handle, 1000, ",")) !== false) {
-                if (count($row) !== 4) {
-                    throw new InvalidFormatException("Formato de fila inválido en el archivo CSV.");
-                }
-                $data[] = new Module(str_replace('"', "", $row[0]), str_replace('"', "", $row[1]),
-                    str_replace('"', "", $row[2]), str_replace('"', "", $row[3]));
-            }
-            fclose($handle);
-        } else {
-            throw new InvalidFormatException("No funciona el CSV.");
-        }
-
-        return $data;
-    }
-
     public static function getModulesInArray() {
-        $data = [];
-
-        try {
-            $conexionNew = new Connection();
-            $conexion = $conexionNew->getConnection();
-            $sql="SELECT * FROM modules";
-
-            $sentencia = $conexion -> prepare($sql);
-            $sentencia -> setFetchMode(PDO::FETCH_OBJ);
-            $sentencia -> execute();
-
-            while($t = $sentencia -> fetch()) {
-                $data[] = new Module($t -> code,  $t -> cliteral, $t -> vliteral, $t -> idCycle);
-            }
-        } catch (PDOException $e) {
-            throw new Exception("Error en la consulta: " . $e->getMessage());
-        }
-
-        return $data;
+        return QueryBuilder::sql(Module::class);
     }
 
     public static function getModuleCode($idModule){
-        $conexionNew = new Connection();
-        $conexion = $conexionNew->getConnection();
-
-        $sql = "select * from modules where code = ?";
-        $sentencia = $conexion -> prepare($sql);
-        $sentencia -> execute([$idModule]);
-        return self::getModuleForm($sentencia -> fetch());
-    }
-
-    private static function getModuleForm($modulo): ?Module
-    {
-        if($modulo){
-            return new Module($modulo["code"], $modulo["cliteral"], $modulo["vliteral"], $modulo["cliteral"]);
-        } else {
-            return null;
-        }
+        return QueryBuilder::find(Module::class, "code", $idModule);
     }
 }

@@ -1,18 +1,20 @@
 <?php
 namespace BatBook;
+use BatBook\QueryBuilder;
 use BatBook\exceptions\WeakPasswordException;
 
 class User{
+    public static $nameTable = "users";
     private $id;
     private $email;
     private $password;
     private $nick;
 
-    public function __construct($id, $email, $password, $nick)
+    public function __construct($id = '', $email = '', $nick = '', $password = '')
     {
         $this->id = $id;
         $this->email = $email;
-        $this->setPassword($password);
+        $this->password = $password;
         $this->nick = $nick;
     }
 
@@ -64,58 +66,26 @@ class User{
         return "User [email=$this->email, nick=$this->nick]";
     }
 
+    public function getArrayForm(){
+        return ["email" => $this->email, "nick" => $this->nick, "password" => $this->password];
+    }
+
     public static function save($user) {
-        $conexionNew = new Connection();
-        $conexion = $conexionNew->getConnection();
-        $sql = "INSERT INTO users (email, nick, password) VALUES (:email, :nick, :password)";
-        $variables = $conexion->prepare($sql);
-        $email = $user->getEmail();
-        $nick = $user->getNick();
-        $password = $user->getPassword();
-
-        $variables->bindParam(':email', $email);
-        $variables->bindParam(':nick', $nick);
-        $variables->bindParam(':password', $password);
-
-        $variables->execute();
-        return $conexion->lastInsertId();
+        return QueryBuilder::insert(User::class, $user->getArrayForm());
     }
 
     public static function getUserNick($nick){
-        $conexionNew = new Connection();
-        $conexion = $conexionNew->getConnection();
-
-        $sql = "select * from users where nick = ?";
-        $sentencia = $conexion -> prepare($sql);
-        $sentencia -> execute([$nick]);
-        return self::getUserForm($sentencia -> fetch());
+        $user = QueryBuilder::sql(User::class, ["nick" => $nick]);
+        return $user[0] ?? null;
     }
 
     public static function getUserEmail($email){
-        $conexionNew = new Connection();
-        $conexion = $conexionNew->getConnection();
-
-        $sql = "select * from users where email = ?";
-        $sentencia = $conexion -> prepare($sql);
-        $sentencia -> execute([$email]);
-        return self::getUserForm($sentencia -> fetch());
+        $user = QueryBuilder::sql(User::class, ["email" => $email]);
+        return $user[0] ?? null;
     }
 
     public static function getUserId($id){
-        $conexionNew = new Connection();
-        $conexion = $conexionNew->getConnection();
-
-        $sql = "select * from users where id = ?";
-        $sentencia = $conexion -> prepare($sql);
-        $sentencia -> execute([$id]);
-        return self::getUserForm($sentencia -> fetch());
-    }
-
-    private static function getUserForm($usuario){
-        if($usuario){
-            return new User($usuario["id"], $usuario["email"], $usuario["password"], $usuario["nick"]);
-        } else {
-            return null;
-        }
+        $user = QueryBuilder::sql(User::class, ["id" => $id]);
+        return $user[0] ?? null;
     }
 }

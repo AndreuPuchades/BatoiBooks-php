@@ -73,25 +73,29 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/load.php';
 use BatBook\Book;
 use BatBook\Module;
 use BatBook\User;
+if(isset($_SESSION['userLogin'])){
+    $books = Book::getBookByIdUser(unserialize($_SESSION['userLogin'])->getId());
+    include_once "../header.php";
 
-$books = Book::getAllBooks();
-include_once "../header.php";
-
-echo "<table>";
-echo "<tr><td>Id</td><td>IdUser</td><td>IdModule</td><td>Publisher</td><td>Price</td><td>Pages</td><td>Status</td><td>Comments</td><td>SoldDate</td><td>Photo</td></tr>";
-if(!empty($books)){
-    foreach ($books as $book){
-        $module = Module::getModuleCode($book->getIdModule());
-        $user = User::getUserId($book->getIdUser());
-        echo '<tr><td>'. $book->getId(). '</td><td>'. $user->getNick(). '</td><td>'. $module->getCliteral(). '</td><td>'. $book->getPublisher(). '</td>
+    echo "<table>";
+    echo "<tr><td>Id</td><td>IdUser</td><td>IdModule</td><td>Publisher</td><td>Price</td><td>Pages</td><td>Status</td><td>Comments</td><td>SoldDate</td><td>Photo</td></tr>";
+    if(!empty($books)){
+        foreach ($books as $book){
+            $module = Module::getModuleCode($book->getIdModule());
+            $user = User::getUserId($book->getIdUser());
+            echo '<tr><td>'. $book->getId(). '</td><td>'. $user->getNick(). '</td><td>'. $module->getCliteral(). '</td><td>'. $book->getPublisher(). '</td>
                 <td>'. $book->getPrice(). ' €</td><td>'. $book->getPages(). ' paginas</td><td>'. $book->getStatus(). '</td><td>'. $book->getComments(). '</td>
                 <td>'. $book->getSoldDateForm(). '</td><td><img src="../'. $book->getPhoto(). '" width="100" height="100"></td>
                 <td><a href="../modifyBook.php?id='. $book->getId(). '">Modificar</a><a href="../deleteBook.php?id='. $book->getId(). '">Eliminar</a></td></tr>';
+        }
+        echo "</table></div>";
+    } else {
+        echo "<h3>No existes libros.</h3>";
     }
-    echo "</table></div>";
 } else {
-    echo "<h3>No existes libros.</h3>";
+    header("Location: ../login.php");
 }
+
 ?>
 </body>
 </html>

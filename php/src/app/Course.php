@@ -1,6 +1,5 @@
 <?php
 namespace BatBook;
-
 use BatBook\exceptions\InvalidFormatException;
 
 class Course{
@@ -9,7 +8,7 @@ class Course{
     private $vliteral;
     private $cliteral;
 
-    public function __construct($cycle, $idFamily, $vliteral, $cliteral)
+    public function __construct($cycle = '', $idFamily = '', $vliteral = '', $cliteral = '')
     {
         $this->cycle = $cycle;
         $this->idFamily = $idFamily;
@@ -70,24 +69,5 @@ class Course{
             'vliteral' => $this->vliteral,
             'cliteral' => $this->cliteral
         ]);
-    }
-
-    public static function importCourseFromCSV($file): array{
-        $data = [];
-
-        if (($handle = fopen($file, 'r')) !== false) {
-            while (($row = fgetcsv($handle, 1000, ",")) !== false) {
-                if (count($row) !== 5) {
-                    throw new InvalidFormatException("Formato de fila inválido en el archivo CSV.");
-                }
-                $data[] = new Course(str_replace('"', "", $row[1]), str_replace('"', "", $row[2]),
-                    str_replace('"', "", $row[3]), str_replace('"', "", $row[4]));
-            }
-            fclose($handle);
-        } else {
-            throw new InvalidFormatException("No funciona el CSV.");
-        }
-
-        return $data;
     }
 }

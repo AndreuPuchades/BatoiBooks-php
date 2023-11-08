@@ -48,8 +48,7 @@ if (isset($_SESSION['userLogin'])) {
             $idUser =  unserialize($_SESSION['userLogin'])->getId();
             $book = new Book($idBook, $idUser, $module, $publisher, $price, $pages, $status, $photo, $comments);
             Book::update($book);
-            $id = $_POST["id"];
-            include_once "./views/myBooks.php";
+            header("Location: /view/myBooks.php");
         } else {
             $id = $_POST["id"];
             foreach (Book::getAllBooks() as $book){

@@ -1,6 +1,6 @@
 <?php
 namespace BatBook;
-
+use BatBook\QueryBuilder;
 use PDO;
 use PDOException;
 
@@ -17,7 +17,8 @@ class Book{
     private $comments;
     private $soldDate;
 
-    public function __construct($id, $idUser, $idModule, $publisher, $price, $pages, $status, $photo, $comments, $soldDate = "")
+    public function __construct($id = '', $idUser = '', $idModule = '', $publisher = '', $price = '', $pages = '',
+                                $status = '', $photo = '', $comments = '', $soldDate = '')
     {
         $this->id = $id;
         $this->idUser = $idUser;
@@ -164,9 +165,9 @@ class Book{
     }
 
     public function getFormArray(){
-        return array('idUser' => $this->idUser, 'idModule' => $this->idModule, 'publisher' => $this->publisher,
+        return ['idUser' => $this->idUser, 'idModule' => $this->idModule, 'publisher' => $this->publisher,
             'price' => $this->price, 'pages' => $this->pages, 'status' => $this->status, 'photo' => $this->photo,
-            'comments' => $this->comments, 'soldDate' => $this->soldDate);
+            'comments' => $this->comments, 'soldDate' => $this->soldDate];
     }
 
     public static function save($book) {
@@ -178,22 +179,18 @@ class Book{
         return QueryBuilder::sql(Book::class);
     }
 
+    public static function getBookByIdUser($idUser)
+    {
+        return QueryBuilder::sql(Book::class, ["idUser" => $idUser]);
+    }
+
     public static function deleteBook($idBook): bool
     {
         return QueryBuilder::delete(Book::class, $idBook);
     }
 
-    public static function update($book): bool
+    public static function update($book)
     {
         return QueryBuilder::update(Book::class, $book->getFormArray(), $book->getId());
-    }
-
-    private static function getBookForm($libro): ?Book{
-        if($libro){
-            return new Book($libro["id"], $libro["idUser"], $libro["idModule"], $libro["publisher"], $libro["price"],
-                $libro["pages"], $libro["status"], $libro["photo"], $libro["comments"], $libro["soldDate"]);
-        } else {
-            return null;
-        }
     }
 }
