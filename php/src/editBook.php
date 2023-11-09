@@ -46,14 +46,14 @@ if (isset($_SESSION['userLogin'])) {
 
         if(empty($errors)){
             $idUser =  unserialize($_SESSION['userLogin'])->getId();
-            $book = new Book($idBook, $idUser, $module, $publisher, $price, $pages, $status, $photo, $comments);
+            $book = new Book($_POST["id"], $idUser, $module, $publisher, $price, $pages, $status, $photo, $comments);
             Book::update($book);
-            header("Location: /view/myBooks.php");
+            header("Location: myBooks.php");
         } else {
             $id = $_POST["id"];
             foreach (Book::getAllBooks() as $book){
                 if($book->getId() == $id){
-                    include_once "./views/modifyBook.php";
+                    include_once "./views/editBook.php";
                     return;
                 }
             }
@@ -65,13 +65,13 @@ if (isset($_SESSION['userLogin'])) {
             $id = $_GET["id"];
             foreach (Book::getAllBooks() as $book){
                 if($book->getId() == $id){
-                    include_once "./views/modifyBook.php";
+                    include_once "./views/editBook.php";
                     return;
                 }
             }
         }
 
-        header("Location: myBooks.php");
+        include_once "./myBooks.php";
     }
 } else {
     header("Location: login.php");

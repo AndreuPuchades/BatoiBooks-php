@@ -13,6 +13,15 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/load.php';
             background-color: #f2f2f2;
         }
 
+        #modificar, #eliminar {
+            background-color: #555;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
         #header {
             background-color: #2380ec;
             color: #acecb6;
@@ -65,7 +74,6 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/load.php';
             display: block;
             margin: auto;
         }
-
     </style>
 </head>
 <body>
@@ -74,19 +82,24 @@ use BatBook\Book;
 use BatBook\Module;
 use BatBook\User;
 if(isset($_SESSION['userLogin'])){
-    $books = Book::getBookByIdUser(unserialize($_SESSION['userLogin'])->getId());
+    $books = Book::getAllBooks();
     include_once "../header.php";
+    $idUser = unserialize($_SESSION['userLogin'])->getId();
 
     echo "<table>";
-    echo "<tr><td>Id</td><td>IdUser</td><td>IdModule</td><td>Publisher</td><td>Price</td><td>Pages</td><td>Status</td><td>Comments</td><td>SoldDate</td><td>Photo</td></tr>";
+    echo "<tr><td>Usuario</td><td>Modulo</td><td>Editorial</td><td>Precio</td><td>Páginas</td><td>Estado</td><td>Comentario</td><td>Fecha de Venta</td><td>Photo</td><td>Acciones</td></tr>";
     if(!empty($books)){
         foreach ($books as $book){
             $module = Module::getModuleCode($book->getIdModule());
             $user = User::getUserId($book->getIdUser());
-            echo '<tr><td>'. $book->getId(). '</td><td>'. $user->getNick(). '</td><td>'. $module->getCliteral(). '</td><td>'. $book->getPublisher(). '</td>
+            echo '<tr><td>'. $user->getNick(). '</td><td>'. $module->getCliteral(). '</td><td>'. $book->getPublisher(). '</td>
                 <td>'. $book->getPrice(). ' €</td><td>'. $book->getPages(). ' paginas</td><td>'. $book->getStatus(). '</td><td>'. $book->getComments(). '</td>
-                <td>'. $book->getSoldDateForm(). '</td><td><img src="../'. $book->getPhoto(). '" width="100" height="100"></td>
-                <td><a href="../modifyBook.php?id='. $book->getId(). '">Modificar</a><a href="../deleteBook.php?id='. $book->getId(). '">Eliminar</a></td></tr>';
+                <td>'. $book->getSoldDateForm(). '</td><td><img src="../'. $book->getPhoto(). '" width="100" height="100"></td>';
+            if($idUser === $user->getId()){
+                echo '<td><a id="modificar" href="../editBook.php?id='. $book->getId(). '">Modificar</a><a id="eliminar" href="../deleteBook.php?id='. $book->getId(). '">Eliminar</a></td></tr>';
+            } else {
+                echo '<td>No eres el dueño</td></tr>';
+            }
         }
         echo "</table></div>";
     } else {
@@ -95,7 +108,6 @@ if(isset($_SESSION['userLogin'])){
 } else {
     header("Location: ../login.php");
 }
-
 ?>
 </body>
 </html>

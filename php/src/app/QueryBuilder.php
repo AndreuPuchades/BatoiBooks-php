@@ -1,6 +1,7 @@
 <?php
 namespace BatBook;
 
+use Error;
 use PDO;
 use PDOException;
 
@@ -78,12 +79,15 @@ class QueryBuilder
         $sentence = $conn->prepare($sql);
         foreach ($values as $key => $value) {
             if($key == "soldDate"){
-                $date = date("Y-m-d", strtotime($value));
-                $sentence->bindValue(":$key", $date);
+                if($value == "" || $value == "null"){
+                    $sentence->bindValue(":$key", null);
+                } else {
+                    $date = date("Y-m-d", strtotime($value));
+                    $sentence->bindValue(":$key", $date);
+                }
             } else {
                 $sentence->bindValue(":$key", $value);
             }
-
         }
         $sentence -> execute();
         return $conn->lastInsertId();
@@ -104,7 +108,16 @@ class QueryBuilder
         $sql .= " WHERE id=:id";
         $sentence = $conn->prepare($sql);
         foreach ($values as $key => $value) {
-            $sentence->bindValue(":$key", $value);
+            if($key == "soldDate"){
+                if($value == "" || $value == "null"){
+                    $sentence->bindValue(":$key", null);
+                } else {
+                    $date = date("Y-m-d", strtotime($value));
+                    $sentence->bindValue(":$key", $date);
+                }
+            } else {
+                $sentence->bindValue(":$key", $value);
+            }
         }
         $sentence -> execute();
         return $id;

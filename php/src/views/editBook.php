@@ -5,7 +5,7 @@ use BatBook\Module;
 try {
     $modulesOptions = Module::getModulesInArray();
     $statusOptions = ['Good', 'Bad', 'Used', 'New'];
-} catch (InvalidFormatException|Exception $e) {
+} catch (InvalidFormatException | Exception $e) {
     echo $e->getMessage();
 }
 ?>
@@ -124,7 +124,7 @@ try {
     </style>
 </head>
 <body>
-<form method="post" action="../modifyBook.php" enctype="multipart/form-data">
+<form method="post" action="../editBook.php" enctype="multipart/form-data">
     <input type="hidden" id="id" name="id" value="<?= $book->getId() ?>">
     <div class="form-group row">
         <label for="url" class="col-4 col-form-label">Mòdul: </label>

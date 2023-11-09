@@ -170,6 +170,12 @@ class Book{
             'comments' => $this->comments, 'soldDate' => $this->soldDate];
     }
 
+    public function getFormArrayUpdate(){
+        return ['id' => $this->id, 'idUser' => $this->idUser, 'idModule' => $this->idModule, 'publisher' => $this->publisher,
+            'price' => $this->price, 'pages' => $this->pages, 'status' => $this->status, 'photo' => $this->photo,
+            'comments' => $this->comments, 'soldDate' => $this->soldDate];
+    }
+
     public static function save($book) {
         return QueryBuilder::insert(Book::class, $book->getFormArray());
     }
@@ -184,6 +190,11 @@ class Book{
         return QueryBuilder::sql(Book::class, ["idUser" => $idUser]);
     }
 
+    public static function getBookById($id)
+    {
+        return QueryBuilder::sql(Book::class, ["id" => $id]);
+    }
+
     public static function deleteBook($idBook): bool
     {
         return QueryBuilder::delete(Book::class, $idBook);
@@ -191,6 +202,6 @@ class Book{
 
     public static function update($book)
     {
-        return QueryBuilder::update(Book::class, $book->getFormArray(), $book->getId());
+        QueryBuilder::update(Book::class, $book->getFormArrayUpdate(), $book->getId());
     }
 }
