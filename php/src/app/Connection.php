@@ -5,9 +5,18 @@ use PDOException;
 
 include_once($_SERVER['DOCUMENT_ROOT']."/config/database.inc.php");
 
+/**
+ *
+ */
 class Connection{
+    /**
+     * @var PDO
+     */
     private $connection;
 
+    /**
+     *
+     */
     public function __construct()
     {
         try {
@@ -18,11 +27,19 @@ class Connection{
         }
     }
 
+    /**
+     * @return PDO
+     */
     public function getConnection(): PDO
     {
         return $this->connection;
     }
 
+    /**
+     * @param $table
+     * @param $data
+     * @return false|string
+     */
     public function insert($table, $data) {
         $columns = implode(', ', array_keys($data));
         $placeholders = ':' . implode(', :', array_keys($data));
