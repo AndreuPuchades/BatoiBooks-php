@@ -1,6 +1,6 @@
 <?php
-include_once('./myHelpers/utils.php');
 include_once('./load.php');
+include_once('./myHelpers/utils.php');
 
 use BatBook\User;
 

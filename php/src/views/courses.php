@@ -83,25 +83,29 @@ use BatBook\Family;
 use BatBook\User;
 
 if(isset($_SESSION['userLogin'])){
+
     $courses = Course::getCoursesAll();
-    include_once "../header.php";
     $idUser = unserialize($_SESSION['userLogin'])->getId();
     $user = User::getUserId($idUser);
-    echo "<table>";
-    echo "<tr><td>Id</td><td>Cycle</td><td>Familia</td><td>VLiteral</td><td>Cliteral</td><td>Acciones</td></tr>";
-    if(!empty($courses)){
-        foreach ($courses as $course){
-            $family = Family::getFamilyById($course->getIdFamily());
-            echo '<tr><td>'. $course->getId(). '</td><td>'. $course->getCycle(). '</td><td>'. $family->getCliteral(). '</td><td>'. $course->getVliteral(). '</td><td>'. $course->getCliteral(). '</td>';
-            if($user->getAdministrador()){
-                echo '<td><a id="mostrar" href="../course.php?id='. $course->getId(). '">Mostrar</a><a id="modificar" href="../editCourse.php?id='. $course->getId(). '">Modificar</a><a id="eliminar" href="../deleteCourse.php?id='. $course->getId(). '">Eliminar</a></td></tr>';
-            } else {
-                echo '<td>No eres administrador</td></tr>';
+    if($user->getAdministrador()){
+        include_once "../header.php";
+        echo "<table>";
+        echo "<tr><td>Id</td><td>Cycle</td><td>Familia</td><td>VLiteral</td><td>Cliteral</td><td>Acciones</td></tr>";
+        if(!empty($courses)){
+            foreach ($courses as $course){
+                $family = Family::getFamilyById($course->getIdFamily());
+                echo '<tr><td>'. $course->getId(). '</td><td>'. $course->getCycle(). '</td><td>'. $family->getCliteral().
+                    '</td><td>'. $course->getVliteral(). '</td><td>'. $course->getCliteral(). '</td>';
+                echo '<td><a id="mostrar" href="../course.php?id='. $course->getId(). '">Mostrar</a><a id="modificar" 
+                href="../editCourse.php?id='. $course->getId(). '">Modificar</a><a id="eliminar" href="../deleteCourse.php?id='.
+                    $course->getId(). '">Eliminar</a></td></tr>';
             }
+            echo "</table></div>";
+        } else {
+            echo "<h3>No existes courses.</h3>";
         }
-        echo "</table></div>";
     } else {
-        echo "<h3>No existes courses.</h3>";
+        header("Location: ../login.php");
     }
 } else {
     header("Location: ../login.php");
