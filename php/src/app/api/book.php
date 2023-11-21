@@ -5,6 +5,7 @@ use BatBook\Book;
 use BatBook\exceptions\InvalidFormatException;
 use BatBook\exceptions\NotFoundException;
 
+header("Content-Type:application/json");
 try{
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $idBook = $_GET["id"];
@@ -14,7 +15,6 @@ try{
             if($book){
                 $jsonBook = $book->__toJson();
                 echo $jsonBook;
-                return $jsonBook;
             } else {
                 throw new InvalidFormatException("El id del llibre no es valid.");
             }

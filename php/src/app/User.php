@@ -2,20 +2,22 @@
 namespace BatBook;
 use BatBook\QueryBuilder;
 use BatBook\exceptions\WeakPasswordException;
-
+use BatBook\MyLog;
 class User{
     public static $nameTable = "users";
     private $id;
     private $email;
     private $password;
     private $nick;
+    private $administrador;
 
-    public function __construct($id = '', $email = '', $nick = '', $password = '')
+    public function __construct($id = '', $email = '', $nick = '', $password = '', $administrador = '')
     {
         $this->id = $id;
         $this->email = $email;
         $this->password = $password;
         $this->nick = $nick;
+        $this->administrador = $administrador;
     }
 
     public function getId()
@@ -61,13 +63,29 @@ class User{
         $this->nick = $nick;
     }
 
+    public function getAdministrador()
+    {
+        return $this->administrador;
+    }
+
     public function __toString()
     {
         return "User [email=$this->email, nick=$this->nick]";
     }
 
+    public function __toJson()
+    {
+        return json_encode([
+            'id' => $this->id,
+            'nick' => $this->nick,
+            'email' => $this->email,
+            'password' => $this->password
+        ]);
+    }
+
+
     public function getArrayForm(){
-        return ["email" => $this->email, "nick" => $this->nick, "password" => $this->password];
+        return ["email" => $this->email, "nick" => $this->nick, "password" => $this->password, "administrador" => $this->administrador];
     }
 
     public static function save($user) {

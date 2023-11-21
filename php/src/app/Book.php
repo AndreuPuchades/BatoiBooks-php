@@ -192,8 +192,8 @@ class Book{
 
     public static function getBookById($id)
     {
-        return QueryBuilder::sql(Book::class, ["id" => $id]);
-    }
+        $book = QueryBuilder::sql(Book::class, ["id" => $id]);
+        return $book[0] ?? null;    }
 
     public static function deleteBook($idBook): bool
     {

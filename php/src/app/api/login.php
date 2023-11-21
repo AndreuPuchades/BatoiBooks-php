@@ -5,17 +5,14 @@ use BatBook\exceptions\InvalidFormatException;
 use BatBook\exceptions\NotFoundException;
 use BatBook\User;
 
+header("Content-Type:application/json");
 try{
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $email = $_POST["email"];
-        $password = $_POST["password"];
-
-        if(isset($email) && isset($password)){
-            $user = User::getUserEmail($email);
+        if(isset($_POST["password"]) && isset($_POST["email"])){
+            $user = User::getUserEmail($_POST["email"]);
             if(password_verify($_POST['password'], $user->getPassword())){
                 $jsonUser = $user->__toJson();
                 echo $jsonUser;
-                return $jsonUser;
             } else {
                 throw new InvalidFormatException("Els valors email y user no son valids.");
             }

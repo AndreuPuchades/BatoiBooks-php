@@ -46,7 +46,7 @@ if (isset($_SESSION['userLogin'])) {
 
         if(empty($errors)){
             $idUser =  unserialize($_SESSION['userLogin'])->getId();
-            $book = new Book($_POST["id"], $idUser, $module, $publisher, $price, $pages, $status, $photo, $comments);
+            $book = new Book($_POST["id"], $idUser, $family, $publisher, $price, $pages, $status, $photo, $comments);
             Book::update($book);
             header("Location: myBooks.php");
         } else {

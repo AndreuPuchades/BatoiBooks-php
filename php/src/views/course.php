@@ -1,3 +1,7 @@
+<?php
+use BatBook\Family;
+?>
+
 <!DOCTYPE html>
 <html lang="ca">
 <head>
@@ -47,14 +51,6 @@
             color: #777;
         }
 
-        img {
-
-            display: block;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            margin-top: 10px;
-        }
-
         a {
             background-color: #007BFF;
             color: #fff;
@@ -64,24 +60,17 @@
             cursor: pointer;
             font-weight: bold;
         }
-
     </style>
 </head>
 <body>
-<div class="book">
+<div class="course">
     <div class="detalls">
-        <h3>Modul -> <?= $course->getIdModule() ?></h3>
-        <p>Id Usuari -> <?= $course->getIdUser() ?></p>
-        <p>Editorial -> <?= $course->getPublisher() ?></p>
-        <p>Venido -> <?= ($course->getSoldDate())?'Si':'NO' ?></p>
-        <p>Preu -> <?= $course->getPrice() ?></p>
-        <p>Pagines -> <?= $course->getPages() ?></p>
-        <p>Estat -> <?= $course->getStatus() ?></p>
-        <p>Comentari -> <?= $course->getComments() ?></p>
-        <a href="../index.php">Home</a>
-    </div>
-    <div class="col-6">
-        <img src="<?= $course->getPhoto() ?>" width="300" height="300">
+        <h2>Id -> <?= $course->getId() ?></h2>
+        <h4>Family -> <?= Family::getFamilyById($course->getIdFamily())->getCliteral()?></h4>
+        <h4>Cycle -> <?= $course->getCycle() ?></h4>
+        <h4>Cliteral -> <?= ($course->getCliteral())?></h4>
+        <h4>Vliteral -> <?= $course->getVliteral() ?></h4>
+        <a href="../courses.php">Llista Cicles</a>
     </div>
 </div>
 </body>

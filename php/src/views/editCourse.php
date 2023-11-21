@@ -1,10 +1,9 @@
 <?php
 use BatBook\exceptions\InvalidFormatException;
-use BatBook\Module;
+use BatBook\Family;
 
 try {
-    $modulesOptions = Module::getModulesInArray();
-    $statusOptions = ['Good', 'Bad', 'Used', 'New'];
+    $family = Family::getFamilyById($course->getIdFamily());
 } catch (InvalidFormatException | Exception $e) {
     echo $e->getMessage();
 }
@@ -124,31 +123,12 @@ try {
     </style>
 </head>
 <body>
-<form method="post" action="../editBook.php" enctype="multipart/form-data">
+<form method="post" action="../editCourse.php" enctype="multipart/form-data">
     <input type="hidden" id="id" name="id" value="<?= $course->getId() ?>">
-    <div class="form-group row">
-        <label for="url" class="col-4 col-form-label">Mòdul: </label>
-        <div class="col-8">
-            <select name="module" id="module" class="form-select" multiple="false">
-                <?php
-                foreach ($modulesOptions as $value) {
-                    if($value->getCode() == $course->getIdModule()){
-                        ?>
-                        <option value="<?= $value->getCode()?>" selected><?= $value->getCliteral()?></option>
-                        <?php
-                    } else {
-                        ?>
-                        <option value="<?= $value->getCode()?>"><?= $value->getCliteral()?></option>
-                        <?php
-                    }
-                }
-                ?>
-            </select>
-        </div>
-    </div>
+    <input type="hidden" id="idFamily" name="idFamily" value="<?= $family->getId() ?>" class="form-control">
 
     <div class="form-group row">
-        <label for="email" class="col-4 col-form-label">Editorial: </label>
+        <label for="family" class="col-4 col-form-label">Family: </label>
         <div class="col-8">
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -156,14 +136,13 @@ try {
                         <i class="fa fa-envelope-open-o"></i>
                     </div>
                 </div>
-                <input id="publisher" name="publisher" value="<?= $course->getPublisher() ?>" placeholder="Escriu la editorial" type="text" class="form-control">
+                <input type="text" id="family" name="family" value="<?= $family->getCliteral() ?>" class="form-control" readonly>
             </div>
         </div>
     </div>
-    <?php printErrors($errors, 'publisher') ?>
 
     <div class="form-group row">
-        <label for="url" class="col-4 col-form-label">Precio: </label>
+        <label for="cycle" class="col-4 col-form-label">Cycle: </label>
         <div class="col-8">
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -171,14 +150,14 @@ try {
                         <i class="fa fa-envelope-open-o"></i>
                     </div>
                 </div>
-                <input id="price" name="price" value="<?= $course->getPrice() ?>" placeholder="Escriu el preu" type="number" class="form-control">
+                <input id="cycle" name="cycle" value="<?= $course->getCycle() ?>" placeholder="Escriu el cycle" type="text" class="form-control">
             </div>
         </div>
     </div>
-    <?php printErrors($errors, 'price') ?>
+    <?php printErrors($errors, 'cycle') ?>
 
     <div class="form-group row">
-        <label for="url" class="col-4 col-form-label">Pàgines: </label>
+        <label for="cliteral" class="col-4 col-form-label">Cliteral: </label>
         <div class="col-8">
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -186,46 +165,14 @@ try {
                         <i class="fa fa-envelope-open-o"></i>
                     </div>
                 </div>
-                <input id="pages" name="pages" value="<?= $course->getPages() ?>" placeholder="Escriu les pagines" type="number" class="form-control">
+                <input id="cliteral" name="cliteral" value="<?= $course->getCliteral() ?>" placeholder="Escriu el cliteral" type="text" class="form-control">
             </div>
         </div>
     </div>
-    <?php printErrors($errors, 'pages') ?>
+    <?php printErrors($errors, 'cliteral') ?>
 
     <div class="form-group row">
-        <label for="url" class="col-4 col-form-label">Estat: </label>
-        <div class="col-8">
-            <select id="status" name="status" class="form-select" multiple="false">
-                <?php
-                foreach ($statusOptions as $value) {
-                    if($value == $course->getStatus()){
-                        ?>
-                        <option value="<?= $value?>" selected><?= $value?></option>
-                        <?php
-                    } else {
-                        ?>
-                        <option value="<?= $value?>"><?= $value?></option>
-                        <?php
-                    }
-                }
-                ?>
-            </select>
-        </div>
-    </div>
-    <?php printErrors($errors, 'status') ?>
-
-    <div class="form-group row">
-        <label for="url" class="col-4 col-form-label">Foto: </label>
-        <div class="col-8">
-            <div class="input-group">
-                <input type="file" name="photo" value="<?= $course->getPhoto() ?>" id="photo" class="form-control" accept="image/*">
-            </div>
-        </div>
-    </div>
-    <?php printErrors($errors, 'photo') ?>
-
-    <div class="form-group row">
-        <label for="url" class="col-4 col-form-label">Comentari: </label>
+        <label for="vliteral" class="col-4 col-form-label">Vliteral: </label>
         <div class="col-8">
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -233,16 +180,16 @@ try {
                         <i class="fa fa-envelope-open-o"></i>
                     </div>
                 </div>
-                <input id="comments" name="comments" value="<?= $course->getComments() ?>" placeholder="Escriu un comentari" type="text" class="form-control">
+                <input id="vliteral" name="vliteral" value="<?= $course->getVliteral() ?>" placeholder="Escriu el vliteral" type="text" class="form-control">
             </div>
         </div>
     </div>
-    <?php printErrors($errors, 'comments') ?>
+    <?php printErrors($errors, 'vliteral') ?>
 
     <div class="form-group row">
         <div class="offset-4 col-8">
             <button name="submit" type="submit" class="btn btn-primary">Submit</button>
-            <a href="../index.php">Home</a>
+            <a href="../courses.php">Listado Ciclos</a>
         </div>
     </div>
 </form>

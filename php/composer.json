@@ -21,6 +21,7 @@
   "require": {
     "ext-pdo": "*",
     "ext-json": "*",
-    "ext-dom": "*"
+    "ext-dom": "*",
+    "dompdf/dompdf": "^1.0"
   }
 }

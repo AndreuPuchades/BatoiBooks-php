@@ -55,7 +55,7 @@ class BookTest extends \Codeception\Test\Unit
     public function testToString()
     {
         $book = new Book(1, 'MOD101', 'Publisher', 29.99, 200, 'Available', 'image.jpg', 'Great book!');
-        $expectedString = "<div class='book'>
+        $expectedString = "<div class='course'>
                     <h6>Id User: 1</h6>
                     <h6>ID Module: MOD101</h6>
                     <h6>Publisher: Publisher</h6>

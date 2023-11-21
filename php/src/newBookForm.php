@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(empty($errors)){
         if(isset($_SESSION['userLogin'])){
             $idUser =  unserialize($_SESSION['userLogin'])->getId();
-            $book = new Book(-1, $idUser, $module, $publisher, $price, $pages, $status, $photo, $comments);
+            $book = new Book(-1, $idUser, $family, $publisher, $price, $pages, $status, $photo, $comments);
             Book::save($book);
         }
 
