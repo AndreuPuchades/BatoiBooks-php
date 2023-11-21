@@ -8,7 +8,7 @@ if (isset($_SESSION['userLogin'])) {
 
         if (!empty($_POST["cycle"])) {
             if(strlen($_POST["cycle"]) > 50){
-                $errors["cycle"] = "El camp vliteral te mes de 100 caracters.";
+                $errors["cycle"] = "El camp cycle te mes de 50 caracters.";
             }
         } else {
             $errors["cycle"] = "El camp cycle és obligatori.";
