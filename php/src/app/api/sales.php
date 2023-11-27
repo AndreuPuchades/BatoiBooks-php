@@ -38,6 +38,7 @@ try{
         echo $sale->__toJson();
         return $sale->__toJson();
     } else {
+
         throw new NotFoundException("No se pasan valores por el POST");
     }
 } catch (NotFoundException $e){
